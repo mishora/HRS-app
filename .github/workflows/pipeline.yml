@@ -10,21 +10,6 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build_test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone the repository
-      uses: actions/checkout@v4
-    - name: Use Node.js v20.x
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
-    - name: run npm install
-      run: npm install
-    - name: run tests
-      run: npm test
-
   security_test:
     runs-on: ubuntu-latest
     steps:
@@ -39,3 +24,19 @@ jobs:
       run: npm install
     - name: Execute security tests
       run: npm audit
+
+  build_test:
+    needs: security_test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone the repository
+      uses: actions/checkout@v4
+    - name: Use Node.js v20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+    - name: run npm install
+      run: npm install
+    - name: run tests
+      run: npm test
